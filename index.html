@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        h1{
+            color: white;
+            display:flex;
+            justify-content: center;
+            text-shadow: 5px, 10px, 10px blue;
+        }
+        body {
+            background-image: url("img/halloween.jpg");
+            background-size: cover; 
+            background-position: center; 
+            background-repeat: no-repeat;
+            }
+
+        .container{
+            display: flex;
+            justify-content: center;
+            align-items: center; 
+            flex-direction: column;
+            row-gap: 20px;
+        }
+        .text{
+            color: red;
+            font-size: 20px;
+        }
+        img{
+            height: 200px;
+            width: auto;
+        }
+        
+    </style>
+</head>
+<body onload="updateView()">
+    <div id="app"></div>
+
+    <script>
+        
+        //MODEL 
+        const correctAnswer = 4;
+        
+        let feedbackText = ""; 
+
+        let tempText;
+
+        const openImg = "img/openDoor.jpg"
+        const closeImg = "img/closedDoor.jpg"
+
+        const congratsSound = new Audio ('sounds/taDa.mp3')
+        const wrongAnswerSound = new Audio ('sounds/carCrash.mp3')
+        
+        //VIEW 
+        //denne funksjonen oppdaterer det vi ser på skjermen
+        function updateView(){
+            document.getElementById('app').innerHTML = /*HTML*/ `
+            <h1>Matte quiz</h1>
+            <div class="container">
+                <img src=${closeImg} alt=""> <br>
+                
+                <!-- her skal det stå om svaret var riktig eller feil -->
+                <div id="feedback" class="text">${feedbackText}</div>
+                
+                <div id="question" class="text"> Hva blir 2 + 2? </div>
+                <input type="text" id="answer" oninput="tempText = this.value">
+                
+                <button id="submit" onclick="checkanswer(tempText)">Submit</button >
+            </div>`;
+    }
+
+        //CONTROLLER
+        
+
+//vi må lage en funksjon som kan bytte bilder 
+// som vi kan kalle på i checkanswer når den får riktig svar
+
+
+function checkAnswer(answer) {
+
+if (answer == correctAnswer) {
+    console.log("correct");
+    feedbackText = "correct";
+    congratsSound.play();
+    document.getElementById('feedback').innerHTML = /*HTML*/ `
+    riktig`;
+    return ;
+    
+}
+
+else {
+    console.log("wrong");
+    wrongAnswerSound.play()
+   // document.getElementById('feedback').innerHTML = /*HTML*/ `
+   // feil`
+    return "wrong";
+
+}
+updateView()
+}
+//  checkanswer(correctAnswer)
+//         console.log(feedback);
+//         feedback = checkanswer(wrong);
+//         console.log(feedback);
+        
+</script>
+
+</body>
+
+</html>
