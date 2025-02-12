@@ -1,113 +1,142 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Escape game</title>
     <style>
-        h1{
-            color: white;
-            display:flex;
+        h1 {
+            color: rgb(45 38 73);
             justify-content: center;
             text-shadow: 5px, 10px, 10px blue;
         }
+
         body {
             background-image: url("img/halloween.jpg");
-            background-size: cover; 
-            background-position: center; 
+            background-size: cover;
+            background-position: center;
             background-repeat: no-repeat;
-            }
+            font-family: 'Times New Roman', serif;
+        }
 
-        .container{
+        .container {
             display: flex;
             justify-content: center;
-            align-items: center; 
+            align-items: center;
             flex-direction: column;
-            row-gap: 20px;
+            row-gap: 10px;
         }
-        .text{
-            color: red;
+        .text {
             font-size: 20px;
+            color:pink;
+            text-transform: capitalize;
         }
-        img{
+        .fail, .correct {
+            font-size: 40px;
+            text-transform: uppercase;
+        }
+        .fail { color: red; }
+        .correct { color: green; }
+        
+
+        img {
             height: 200px;
             width: auto;
+            opacity: 1;
         }
-        
+
+        input {
+            width: auto;
+            height: 20px;
+            font-family:"Times New Roman", serif;
+            font-size: 16px;
+            border-color: crimson;
+        }
+        button {
+            background-color: transparent;
+            border: 20px, 2px, black;
+            color: orange;
+            padding: 15px 32px;
+            font-family:"Times New Roman", serif;
+            text-align: center;
+            font-size: 16px;
+        }
     </style>
 </head>
+
 <body onload="updateView()">
     <div id="app"></div>
 
     <script>
-        
+
         //MODEL 
         const correctAnswer = 4;
-        
-        let feedbackText = ""; 
+
+        let feedbackText = "";
 
         let tempText;
-
-        const openImg = "img/openDoor.jpg"
-        const closeImg = "img/closedDoor.jpg"
-
-        const congratsSound = new Audio ('sounds/taDa.mp3')
-        const wrongAnswerSound = new Audio ('sounds/carCrash.mp3')
         
+        let showImg = "img/closedDoor.jpg"
+
+        const congratsSound = new Audio('sounds/taDa.mp3')
+        const wrongAnswerSound = new Audio('sounds/carCrash.mp3')
+
         //VIEW 
-        //denne funksjonen oppdaterer det vi ser på skjermen
-        function updateView(){
+
+        function updateView() {
             document.getElementById('app').innerHTML = /*HTML*/ `
             <h1>Matte quiz</h1>
             <div class="container">
-                <img src=${closeImg} alt=""> <br>
+                <img id="imageid" src=${showImg} alt=""> <br>
                 
                 <!-- her skal det stå om svaret var riktig eller feil -->
                 <div id="feedback" class="text">${feedbackText}</div>
                 
                 <div id="question" class="text"> Hva blir 2 + 2? </div>
-                <input type="text" id="answer" oninput="tempText = this.value">
+                <input type="text" id="answer" oninput="tempText = this.value" placeholder = "Svaret ditt">
                 
-                <button id="submit" onclick="checkanswer(tempText)">Submit</button >
+                <button id="submit" onclick="checkAnswer(tempText)">Svar</button >
             </div>`;
-    }
+        }
 
         //CONTROLLER
-        
 
-//vi må lage en funksjon som kan bytte bilder 
-// som vi kan kalle på i checkanswer når den får riktig svar
+        function checkAnswer(answer) {
+            if (answer == correctAnswer) {
+                feedbackText = "correct answer";
+                console.log(feedbackText);
+                congratsSound.play();
+                document.getElementById('feedback').innerHTML = feedbackText;
+                changeImage();
+                updateView(); 
+
+            } 
+            else {
+                feedbackText = "wrong answer";
+                console.log(feedbackText);
+                wrongAnswerSound.play();
+                document.getElementById('feedback').innerHTML = feedbackText;
+                updateView(); 
+            }
+        }
+
+        function changeImage(){
+            showImg = "img/openDoor.jpg";
+        }
+
+        // function changeImage(correctAnswer) { 
+        //     if(correctAnswer){
+        //         document.getElementById("imageid").src = "img/openDoor.jpg";}
+        //     else {
+                
+        //         document.getElementById("imageid").src= "img/ghost.png";
+        //     }
+        // }
 
 
-function checkAnswer(answer) {
-
-if (answer == correctAnswer) {
-    console.log("correct");
-    feedbackText = "correct";
-    congratsSound.play();
-    document.getElementById('feedback').innerHTML = /*HTML*/ `
-    riktig`;
-    return ;
-    
-}
-
-else {
-    console.log("wrong");
-    wrongAnswerSound.play()
-   // document.getElementById('feedback').innerHTML = /*HTML*/ `
-   // feil`
-    return "wrong";
-
-}
-updateView()
-}
-//  checkanswer(correctAnswer)
-//         console.log(feedback);
-//         feedback = checkanswer(wrong);
-//         console.log(feedback);
-        
-</script>
+    </script>
 
 </body>
 
